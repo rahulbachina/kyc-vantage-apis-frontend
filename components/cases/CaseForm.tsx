@@ -85,7 +85,7 @@ export function CaseForm({ defaultValues, onSubmit, isLoading, isEdit }: CaseFor
                     <CardHeader>
                         <CardTitle>Case Information</CardTitle>
                     </CardHeader>
-                    <CardContent className="grid gap-6 md:grid-cols-2">
+                    <CardContent className="grid gap-8 md:grid-cols-2">
                         <FormField
                             control={form.control}
                             name="entityName"
@@ -189,7 +189,7 @@ export function CaseForm({ defaultValues, onSubmit, isLoading, isEdit }: CaseFor
                         <CardTitle>BE Form Details</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="grid gap-6 md:grid-cols-2">
+                        <div className="grid gap-8 md:grid-cols-2">
                             <FormField control={form.control} name="beForm.legalName" render={({ field }) => (
                                 <FormItem><FormLabel>Legal Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
