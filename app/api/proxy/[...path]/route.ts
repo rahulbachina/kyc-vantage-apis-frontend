@@ -10,7 +10,7 @@ export async function GET(
   const path = pathArray.join('/');
   const searchParams = request.nextUrl.searchParams;
   const queryString = searchParams.toString();
-  const url = `${API_BASE_URL}/${path}${queryString ? `?${queryString}` : ''}`;
+  const url = `${API_BASE_URL}/api/${path}${queryString ? `?${queryString}` : ''}`;
 
   try {
     const response = await fetch(url, {
@@ -35,7 +35,7 @@ export async function POST(
   const { path: pathArray } = await params;
   const path = pathArray.join('/');
   const body = await request.json();
-  const url = `${API_BASE_URL}/${path}`;
+  const url = `${API_BASE_URL}/api/${path}`;
 
   try {
     const response = await fetch(url, {
@@ -61,7 +61,7 @@ export async function PUT(
   const { path: pathArray } = await params;
   const path = pathArray.join('/');
   const body = await request.json();
-  const url = `${API_BASE_URL}/${path}`;
+  const url = `${API_BASE_URL}/api/${path}`;
 
   try {
     const response = await fetch(url, {
@@ -86,7 +86,7 @@ export async function DELETE(
 ) {
   const { path: pathArray } = await params;
   const path = pathArray.join('/');
-  const url = `${API_BASE_URL}/${path}`;
+  const url = `${API_BASE_URL}/api/${path}`;
 
   try {
     const response = await fetch(url, {
