@@ -9,8 +9,12 @@ export type PASClientProcess = components['schemas']['PASClientProcess'];
 export type CasesListResponse = components['schemas']['CasesListResponse'];
 export type Attachment = components['schemas']['Attachment'];
 
-// Create Axios 
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://37.27.255.95:8090';
+// Create Axios
+// Use proxy in production to avoid CORS issues, direct API in development
+const isDevelopment = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+const baseURL = isDevelopment
+  ? (process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://37.27.255.95:8090')
+  : '/api/proxy';
 
 const client: AxiosInstance = axios.create({
   baseURL,
