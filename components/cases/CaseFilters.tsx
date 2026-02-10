@@ -95,7 +95,7 @@ export function CaseFilters({
                         <SelectTrigger className="w-[200px] h-10 bg-background/50 border-muted">
                             <SelectValue placeholder="All Statuses" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent position="popper" sideOffset={4}>
                             <SelectItem value="all">All Statuses</SelectItem>
                             <SelectItem value="ONBOARDING_COMPLETE">
                                 <div className="flex items-center gap-2">
@@ -144,7 +144,7 @@ export function CaseFilters({
                         <SelectTrigger className="w-[200px] h-10 bg-background/50 border-muted">
                             <SelectValue placeholder="All Units" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent position="popper" sideOffset={4}>
                             <SelectItem value="all">All Business Units</SelectItem>
                             <SelectItem value="Ardonagh Specialty">
                                 <div className="flex items-center gap-2">
