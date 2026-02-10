@@ -4,13 +4,15 @@ const API_BASE_URL = 'http://37.27.255.95:8090';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
+  context: { params: Promise<{ path?: string[] }> }
 ) {
-  const { path: pathArray } = await params;
+  const { path: pathArray = [] } = await context.params;
   const path = pathArray.join('/');
   const searchParams = request.nextUrl.searchParams;
   const queryString = searchParams.toString();
   const url = `${API_BASE_URL}/api/${path}${queryString ? `?${queryString}` : ''}`;
+
+  console.log('[Proxy GET]', url);
 
   try {
     const response = await fetch(url, {
@@ -30,12 +32,14 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
+  context: { params: Promise<{ path?: string[] }> }
 ) {
-  const { path: pathArray } = await params;
+  const { path: pathArray = [] } = await context.params;
   const path = pathArray.join('/');
   const body = await request.json();
   const url = `${API_BASE_URL}/api/${path}`;
+
+  console.log('[Proxy POST]', url);
 
   try {
     const response = await fetch(url, {
@@ -56,12 +60,14 @@ export async function POST(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
+  context: { params: Promise<{ path?: string[] }> }
 ) {
-  const { path: pathArray } = await params;
+  const { path: pathArray = [] } = await context.params;
   const path = pathArray.join('/');
   const body = await request.json();
   const url = `${API_BASE_URL}/api/${path}`;
+
+  console.log('[Proxy PUT]', url);
 
   try {
     const response = await fetch(url, {
@@ -82,11 +88,13 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
+  context: { params: Promise<{ path?: string[] }> }
 ) {
-  const { path: pathArray } = await params;
+  const { path: pathArray = [] } = await context.params;
   const path = pathArray.join('/');
   const url = `${API_BASE_URL}/api/${path}`;
+
+  console.log('[Proxy DELETE]', url);
 
   try {
     const response = await fetch(url, {
