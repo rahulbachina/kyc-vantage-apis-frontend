@@ -1,0 +1,496 @@
+"use client"
+
+import { useCase, useDeleteCase } from "@/hooks/useCases"
+import { useParams, useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { StatusBadge } from "@/components/cases/StatusBadge"
+import { RiskTierBadge } from "@/components/cases/RiskTierBadge"
+import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Badge } from "@/components/ui/badge"
+import {
+    ArrowLeft,
+    Edit,
+    Trash2,
+    Send,
+    Building2,
+    User,
+    Calendar,
+    TrendingUp,
+    FileText,
+    CheckCircle2,
+    Clock,
+    AlertCircle,
+    XCircle,
+    Download,
+    ExternalLink,
+    Building,
+    Mail,
+    MapPin,
+    Hash
+} from "lucide-react"
+import { toast } from "sonner"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { format } from "date-fns"
+
+export default function CaseDetailPage() {
+    const params = useParams()
+    const router = useRouter()
+    const id = params.id as string
+    const { data: caseDetail, isLoading, error } = useCase(id)
+    const deleteMutation = useDeleteCase()
+
+    if (isLoading) {
+        return (
+            <div className="p-8 space-y-4">
+                <Skeleton className="h-12 w-[300px]" />
+                <Skeleton className="h-[200px] w-full" />
+            </div>
+        )
+    }
+
+    if (error || !caseDetail) {
+        return (
+            <div className="p-8">
+                <Card className="border-destructive">
+                    <CardContent className="pt-6">
+                        <div className="flex items-center gap-2 text-destructive">
+                            <XCircle className="h-5 w-5" />
+                            <span className="font-medium">Error loading case details.</span>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        )
+    }
+
+    const handleDelete = async () => {
+        try {
+            await deleteMutation.mutateAsync(id)
+            toast.success("Case deleted successfully")
+            router.push("/cases")
+        } catch (error) {
+            toast.error("Failed to delete case")
+        }
+    }
+
+    const getAutomationStatusIcon = (status: string) => {
+        switch (status) {
+            case 'success': return <CheckCircle2 className="h-5 w-5 text-green-600" />
+            case 'pending': return <Clock className="h-5 w-5 text-yellow-600" />
+            case 'failed': return <XCircle className="h-5 w-5 text-red-600" />
+            case 'not_applicable': return <AlertCircle className="h-5 w-5 text-gray-400" />
+            default: return <Clock className="h-5 w-5 text-gray-400" />
+        }
+    }
+
+    const getAutomationStatusColor = (status: string) => {
+        switch (status) {
+            case 'success': return 'bg-green-50 border-green-200'
+            case 'pending': return 'bg-yellow-50 border-yellow-200'
+            case 'failed': return 'bg-red-50 border-red-200'
+            case 'not_applicable': return 'bg-gray-50 border-gray-200'
+            default: return 'bg-gray-50 border-gray-200'
+        }
+    }
+
+    return (
+        <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
+            {/* Header Section */}
+            <div className="space-y-4">
+                <Button
+                    variant="ghost"
+                    onClick={() => router.back()}
+                    className="pl-0 hover:bg-transparent"
+                >
+                    <ArrowLeft className="mr-2 h-4 w-4" /> Back to Cases
+                </Button>
+
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-md">
+                                <Building2 className="h-6 w-6 text-white" />
+                            </div>
+                            <div>
+                                <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                                    {caseDetail.entityName}
+                                </h2>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                                    <span className="font-mono">ID: {caseDetail._id.substring(0, 12)}...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2">
+                            <StatusBadge status={caseDetail.status} />
+                            <RiskTierBadge riskTier={caseDetail.riskTier} />
+                            <Badge variant="outline" className="gap-1">
+                                <Building className="h-3 w-3" />
+                                {caseDetail.businessUnit}
+                            </Badge>
+                            <Badge variant="outline" className="gap-1">
+                                <User className="h-3 w-3" />
+                                {caseDetail.assignedUser}
+                            </Badge>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => router.push(`/cases/${id}/edit`)}
+                            className="shadow-sm"
+                        >
+                            <Edit className="mr-2 h-4 w-4" /> Edit
+                        </Button>
+
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="destructive" className="shadow-sm">
+                                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete the case
+                                        and all associated data.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
+                </div>
+            </div>
+
+            {/* Tabs Section */}
+            <Tabs defaultValue="overview" className="space-y-6">
+                <TabsList className="bg-muted/50 p-1 h-auto gap-1">
+                    <TabsTrigger
+                        value="overview"
+                        className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-600 gap-2"
+                    >
+                        <TrendingUp className="h-4 w-4" />
+                        Overview
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="be-form"
+                        className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-purple-600 gap-2"
+                    >
+                        <FileText className="h-4 w-4" />
+                        BE Form
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="automation"
+                        className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-green-600 gap-2"
+                    >
+                        <CheckCircle2 className="h-4 w-4" />
+                        Automation Results
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="attachments"
+                        className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-orange-600 gap-2"
+                    >
+                        <Download className="h-4 w-4" />
+                        Attachments
+                    </TabsTrigger>
+                </TabsList>
+
+                {/* Overview Tab */}
+                <TabsContent value="overview" className="space-y-6">
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        <Card className="border-l-4 border-l-blue-500 shadow-sm hover:shadow-md transition-shadow">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    Business Unit
+                                </CardTitle>
+                                <Building2 className="h-4 w-4 text-blue-500" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{caseDetail.businessUnit}</div>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-purple-500 shadow-sm hover:shadow-md transition-shadow">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    Assigned User
+                                </CardTitle>
+                                <User className="h-4 w-4 text-purple-500" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{caseDetail.assignedUser}</div>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    CPI Score
+                                </CardTitle>
+                                <TrendingUp className="h-4 w-4 text-green-500" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{caseDetail.cpiScore ?? "N/A"}</div>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-orange-500 shadow-sm hover:shadow-md transition-shadow">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    Days Open
+                                </CardTitle>
+                                <Calendar className="h-4 w-4 text-orange-500" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{caseDetail.daysOpen ?? 0}</div>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    Since {format(new Date(caseDetail.createdAt), 'MMM dd, yyyy')}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </TabsContent>
+
+                {/* BE Form Tab */}
+                <TabsContent value="be-form">
+                    <Card className="shadow-md border-t-4 border-t-purple-500">
+                        <CardHeader className="bg-purple-50/50 border-b">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                                    <FileText className="h-4 w-4 text-purple-600" />
+                                </div>
+                                <div>
+                                    <CardTitle className="text-purple-900">BE Form Data</CardTitle>
+                                    <CardDescription>Submitted form details and company information</CardDescription>
+                                </div>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="pt-6">
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div className="space-y-4">
+                                    <h3 className="font-semibold text-lg flex items-center gap-2">
+                                        <Building className="h-5 w-5 text-purple-600" />
+                                        Company Information
+                                    </h3>
+                                    <div className="space-y-3">
+                                        <div className="flex items-start gap-2">
+                                            <span className="text-muted-foreground min-w-[140px]">Legal Name:</span>
+                                            <span className="font-medium">{caseDetail.beForm.legalName}</span>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                            <span className="text-muted-foreground min-w-[140px]">Trading Name:</span>
+                                            <span className="font-medium">{caseDetail.beForm.tradingName}</span>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                            <Hash className="h-4 w-4 text-muted-foreground mt-0.5" />
+                                            <span className="text-muted-foreground min-w-[120px]">Registration No:</span>
+                                            <span className="font-medium font-mono">{caseDetail.beForm.registrationNumber}</span>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                            <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
+                                            <span className="text-muted-foreground min-w-[120px]">Country:</span>
+                                            <span className="font-medium">{caseDetail.beForm.country}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <h3 className="font-semibold text-lg flex items-center gap-2">
+                                        <Mail className="h-5 w-5 text-purple-600" />
+                                        Contact Information
+                                    </h3>
+                                    <div className="space-y-3">
+                                        <div className="flex items-start gap-2">
+                                            <span className="text-muted-foreground min-w-[140px]">Statement Email:</span>
+                                            <a href={`mailto:${caseDetail.beForm.statementEmail}`} className="font-medium text-blue-600 hover:underline">
+                                                {caseDetail.beForm.statementEmail}
+                                            </a>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                            <span className="text-muted-foreground min-w-[140px]">Credit Email:</span>
+                                            <a href={`mailto:${caseDetail.beForm.creditControllerEmail}`} className="font-medium text-blue-600 hover:underline">
+                                                {caseDetail.beForm.creditControllerEmail}
+                                            </a>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                            <span className="text-muted-foreground min-w-[140px]">Address:</span>
+                                            <div className="font-medium">
+                                                {caseDetail.beForm.addressLine1}
+                                                {caseDetail.beForm.addressLine2 && <>, {caseDetail.beForm.addressLine2}</>}
+                                                <br />
+                                                {caseDetail.beForm.city}, {caseDetail.beForm.postcode}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                {/* Automation Results Tab */}
+                <TabsContent value="automation">
+                    <Card className="shadow-md border-t-4 border-t-green-500">
+                        <CardHeader className="bg-green-50/50 border-b">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                </div>
+                                <div>
+                                    <CardTitle className="text-green-900">Automation Results</CardTitle>
+                                    <CardDescription>External data verification status</CardDescription>
+                                </div>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="pt-6">
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div className={`flex items-center justify-between p-4 rounded-lg border-2 ${getAutomationStatusColor(caseDetail.automationResults.companiesHouse.status)} transition-all hover:shadow-md`}>
+                                    <div className="flex items-center gap-3">
+                                        {getAutomationStatusIcon(caseDetail.automationResults.companiesHouse.status)}
+                                        <div>
+                                            <div className="font-semibold">Companies House</div>
+                                            <div className="text-sm text-muted-foreground capitalize">{caseDetail.automationResults.companiesHouse.status}</div>
+                                        </div>
+                                    </div>
+                                    {caseDetail.automationResults.companiesHouse.status === 'success' && (
+                                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                                    )}
+                                </div>
+
+                                <div className={`flex items-center justify-between p-4 rounded-lg border-2 ${getAutomationStatusColor(caseDetail.automationResults.fca.status)} transition-all hover:shadow-md`}>
+                                    <div className="flex items-center gap-3">
+                                        {getAutomationStatusIcon(caseDetail.automationResults.fca.status)}
+                                        <div>
+                                            <div className="font-semibold">FCA</div>
+                                            <div className="text-sm text-muted-foreground capitalize">{caseDetail.automationResults.fca.status}</div>
+                                        </div>
+                                    </div>
+                                    {caseDetail.automationResults.fca.status === 'success' && (
+                                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                                    )}
+                                </div>
+
+                                <div className={`flex items-center justify-between p-4 rounded-lg border-2 ${getAutomationStatusColor(caseDetail.automationResults.dAndB.status)} transition-all hover:shadow-md`}>
+                                    <div className="flex items-center gap-3">
+                                        {getAutomationStatusIcon(caseDetail.automationResults.dAndB.status)}
+                                        <div>
+                                            <div className="font-semibold">D&B</div>
+                                            <div className="text-sm text-muted-foreground capitalize">{caseDetail.automationResults.dAndB.status}</div>
+                                        </div>
+                                    </div>
+                                    {caseDetail.automationResults.dAndB.status === 'success' && (
+                                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                                    )}
+                                </div>
+
+                                <div className={`flex items-center justify-between p-4 rounded-lg border-2 ${getAutomationStatusColor(caseDetail.automationResults.lexisNexis.status)} transition-all hover:shadow-md`}>
+                                    <div className="flex items-center gap-3">
+                                        {getAutomationStatusIcon(caseDetail.automationResults.lexisNexis.status)}
+                                        <div>
+                                            <div className="font-semibold">LexisNexis</div>
+                                            <div className="text-sm text-muted-foreground capitalize">{caseDetail.automationResults.lexisNexis.status}</div>
+                                        </div>
+                                    </div>
+                                    {caseDetail.automationResults.lexisNexis.status === 'success' && (
+                                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                                    )}
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                {/* Attachments Tab */}
+                <TabsContent value="attachments">
+                    <Card className="shadow-md border-t-4 border-t-orange-500">
+                        <CardHeader className="bg-orange-50/50 border-b">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                                    <Download className="h-4 w-4 text-orange-600" />
+                                </div>
+                                <div>
+                                    <CardTitle className="text-orange-900">Attachments</CardTitle>
+                                    <CardDescription>
+                                        {caseDetail.attachments?.length || 0} file(s) attached
+                                    </CardDescription>
+                                </div>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="pt-6">
+                            {caseDetail.attachments && caseDetail.attachments.length > 0 ? (
+                                <div className="grid gap-3">
+                                    {caseDetail.attachments.map(att => (
+                                        <div
+                                            key={att.id}
+                                            className="flex items-center justify-between p-4 rounded-lg border-2 border-orange-100 bg-orange-50/30 hover:bg-orange-50 hover:border-orange-200 transition-all"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+                                                    <FileText className="h-5 w-5 text-orange-600" />
+                                                </div>
+                                                <div>
+                                                    <div className="font-medium">{att.fileName}</div>
+                                                    <div className="text-sm text-muted-foreground">
+                                                        {att.fileType} • Uploaded by {att.uploadedBy || 'System'}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                asChild
+                                                className="text-orange-600 hover:text-orange-700 hover:bg-orange-100"
+                                            >
+                                                <a href={att.downloadUrl} target="_blank" rel="noopener noreferrer">
+                                                    <Download className="h-4 w-4 mr-2" />
+                                                    Download
+                                                </a>
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+                                    <FileText className="h-12 w-12 mb-3 opacity-20" />
+                                    <p className="font-medium">No attachments found</p>
+                                    <p className="text-sm">Files will appear here when added to the case</p>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
+
+            {/* Send to PAS Button */}
+            <div className="flex justify-end pt-6">
+                <Button
+                    onClick={() => router.push(`/cases/${id}/send-to-pas`)}
+                    size="lg"
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all"
+                >
+                    <Send className="mr-2 h-5 w-5" />
+                    Send to PAS
+                </Button>
+            </div>
+        </div>
+    )
+}

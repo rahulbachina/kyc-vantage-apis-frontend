@@ -1,0 +1,148 @@
+═══════════════════════════════════════════════════════════════
+  COPY & PASTE THIS TO YOUR VIBECODING TOOL
+═══════════════════════════════════════════════════════════════
+
+[ATTACH FILE: vantage-kyc-openapi-enhanced.json]
+
+Then use this prompt:
+
+═══════════════════════════════════════════════════════════════
+
+Generate a complete Next.js 14 application with TypeScript for the Vantage KYC API using the provided OpenAPI specification.
+
+Requirements:
+
+Tech Stack:
+- Next.js 14 (App Router)
+- TypeScript
+- shadcn/ui components
+- TailwindCSS
+- React Query for data fetching
+- React Hook Form with Zod validation
+- Axios for API calls
+
+Features to Implement:
+
+1. Cases List Page (/cases)
+   - Table view with all cases
+   - Pagination (client-side controls)
+   - Search bar (filter by entity name)
+   - Filters: Status, Business Unit, Assigned User, Risk Tier
+   - Sortable columns
+   - "Create New Case" button
+   - Click row to view details
+
+2. Case Detail Page (/cases/[id])
+   - Display all case information
+   - Tabs for: Overview, BE Form, Automation Results, Attachments
+   - Action buttons: Edit, Delete, Send to PAS
+   - Breadcrumb navigation
+
+3. Create Case Page (/cases/new)
+   - Multi-step form or single page form
+   - Sections: Basic Info, BE Form Details, Bank Details
+   - Form validation using Zod
+   - Required field indicators
+   - Submit and Cancel buttons
+   - Success/Error notifications
+
+4. Edit Case Page (/cases/[id]/edit)
+   - Pre-filled form with existing case data
+   - Same structure as Create page
+   - Update functionality
+
+5. Dashboard Page (/) - Optional
+   - Summary cards: Total Cases, Pending Review, Completed
+   - Recent cases list
+   - Quick stats
+
+UI Components to Create:
+- CasesTable component (reusable)
+- CaseFilters component (sidebar or top filters)
+- CaseForm component (create/edit)
+- StatusBadge component
+- RiskTierBadge component
+- Pagination component
+- SearchBar component
+- ConfirmDialog component (for delete)
+
+API Configuration:
+- Base URL: http://37.27.255.95:8090
+- Create TypeScript types from OpenAPI schemas
+- Generate API client with all endpoints
+- Add error handling and loading states
+
+Additional Requirements:
+- Responsive design (mobile-friendly)
+- Dark mode support (optional)
+- Toast notifications for actions
+- Loading skeletons
+- Error boundaries
+- Form validation with helpful error messages
+- Confirmation dialogs for destructive actions
+
+File Structure:
+/app
+  /cases
+    page.tsx (list)
+    /[id]
+      page.tsx (detail)
+      /edit
+        page.tsx (edit form)
+    /new
+      page.tsx (create form)
+/components
+  /cases
+    CasesTable.tsx
+    CaseFilters.tsx
+    CaseForm.tsx
+    StatusBadge.tsx
+    RiskTierBadge.tsx
+/lib
+  /api
+    client.ts (API client)
+    types.ts (TypeScript types from OpenAPI)
+  /hooks
+    useCases.ts
+    useCase.ts
+/schemas
+  case.schema.ts (Zod schemas)
+
+Environment Variables:
+NEXT_PUBLIC_API_BASE_URL=http://37.27.255.95:8090
+
+Generate complete, production-ready code with:
+- Proper TypeScript types
+- Error handling
+- Loading states
+- Responsive design
+- Accessible UI components
+- Clean, well-commented code
+
+═══════════════════════════════════════════════════════════════
+
+API ENDPOINTS (from OpenAPI spec):
+
+GET    /api/cases              - List cases (paginated, filtered)
+POST   /api/cases              - Create new case
+GET    /api/cases/{id}         - Get case details
+PUT    /api/cases/{id}         - Update case
+DELETE /api/cases/{id}         - Delete case
+POST   /api/cases/{id}/convert-to-pas
+POST   /api/cases/{id}/send-to-pas
+
+Query Parameters (for GET /api/cases):
+- page: number (0-indexed)
+- pageSize: number (1-100)
+- sortBy: string (field name)
+- sortOrder: "asc" | "desc"
+- status: string
+- businessUnit: string
+- assignedUser: string
+- search: string
+
+═══════════════════════════════════════════════════════════════
+
+Please generate the complete Next.js application structure with all files and code needed to build this UI.
+
+═══════════════════════════════════════════════════════════════

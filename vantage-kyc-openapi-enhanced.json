@@ -1,0 +1,2409 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Vantage KYC API",
+    "description": "Vantage KYC Case Management API - Ardonagh Specialities",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root",
+        "description": "Root endpoint.",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases": {
+      "post": {
+        "summary": "Create Case Endpoint",
+        "description": "Create a new case.",
+        "operationId": "create_case_endpoint_api_cases_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create Case Endpoint Api Cases Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Cases Endpoint",
+        "description": "Get all cases with pagination, filtering and sorting.\n\nQuery Parameters:\n- page: Page number (0-indexed, default: 0)\n- pageSize: Number of items per page (default: 25)\n- sortBy: Field to sort by (default: createdAt)\n- sortOrder: Sort order - 'asc' or 'desc' (default: desc)\n- view: Preset view filter - 'my-cases', 'all-cases', or 'sla-breaches'\n- search: Free-text search on entity name or case ID\n- case_status: Filter by case status\n- businessUnit: Filter by business unit\n- assignedUser: Filter by assigned user",
+        "operationId": "list_cases_endpoint_api_cases_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Page number (0-indexed)",
+              "default": 0,
+              "title": "Page"
+            },
+            "description": "Page number (0-indexed)"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Page size",
+              "default": 25,
+              "title": "Pagesize"
+            },
+            "description": "Page size"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Field to sort by",
+              "default": "createdAt",
+              "title": "Sortby"
+            },
+            "description": "Field to sort by"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(asc|desc)$",
+              "description": "Sort order",
+              "default": "desc",
+              "title": "Sortorder"
+            },
+            "description": "Sort order"
+          },
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "View filter: my-cases, all-cases, sla-breaches",
+              "title": "View"
+            },
+            "description": "View filter: my-cases, all-cases, sla-breaches"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search entity name or case ID",
+              "title": "Search"
+            },
+            "description": "Search entity name or case ID"
+          },
+          {
+            "name": "case_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by case status",
+              "title": "Case Status"
+            },
+            "description": "Filter by case status"
+          },
+          {
+            "name": "businessUnit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by business unit",
+              "title": "Businessunit"
+            },
+            "description": "Filter by business unit"
+          },
+          {
+            "name": "assignedUser",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by assigned user",
+              "title": "Assigneduser"
+            },
+            "description": "Filter by assigned user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasesListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}": {
+      "get": {
+        "summary": "Get Case Endpoint",
+        "description": "Get a case by ID.",
+        "operationId": "get_case_endpoint_api_cases__case_id__get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Case Endpoint",
+        "description": "Update an existing case.",
+        "operationId": "update_case_endpoint_api_cases__case_id__put",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Update Case Endpoint Api Cases  Case Id  Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Case Endpoint",
+        "description": "Delete a case.",
+        "operationId": "delete_case_endpoint_api_cases__case_id__delete",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Delete Case Endpoint Api Cases  Case Id  Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/convert-to-pas": {
+      "post": {
+        "summary": "Convert To Pas Endpoint",
+        "description": "Convert a case to PAS Client Process format.\n\nThis endpoint retrieves a case and converts it to the downstream\nPAS (Process Automation System) schema format.",
+        "operationId": "convert_to_pas_endpoint_api_cases__case_id__convert_to_pas_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "sentToRpaBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Email of RPA sender",
+              "default": "system@example.com",
+              "title": "Senttorpaby"
+            },
+            "description": "Email of RPA sender"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PASClientProcess"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/send-to-pas": {
+      "post": {
+        "summary": "Send To Pas Endpoint",
+        "description": "Convert a case to PAS format and send to downstream processing queue.\n\nThis endpoint:\n1. Retrieves the case\n2. Converts it to PAS Client Process format\n3. Sends it to the processing queue for downstream automation\n\nThe case will be added to the queue with the specified priority.",
+        "operationId": "send_to_pas_endpoint_api_cases__case_id__send_to_pas_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "sentToRpaBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Email of RPA sender",
+              "default": "system@example.com",
+              "title": "Senttorpaby"
+            },
+            "description": "Email of RPA sender"
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Queue priority: High, Medium, Low",
+              "default": "High",
+              "title": "Priority"
+            },
+            "description": "Queue priority: High, Medium, Low"
+          },
+          {
+            "name": "referencePrefix",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Reference prefix",
+              "default": "CASE",
+              "title": "Referenceprefix"
+            },
+            "description": "Reference prefix"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Send To Pas Endpoint Api Cases  Case Id  Send To Pas Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Address": {
+        "properties": {
+          "line1": {
+            "type": "string",
+            "title": "Line1"
+          },
+          "line2": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line2"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "postCode": {
+            "type": "string",
+            "title": "Postcode"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          }
+        },
+        "type": "object",
+        "required": [
+          "line1",
+          "city",
+          "postCode"
+        ],
+        "title": "Address",
+        "description": "Address information."
+      },
+      "Attachment": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "fileName": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "fileType": {
+            "$ref": "#/components/schemas/FileType"
+          },
+          "source": {
+            "$ref": "#/components/schemas/AttachmentSource"
+          },
+          "uploadedAt": {
+            "type": "string",
+            "title": "Uploadedat"
+          },
+          "uploadedBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uploadedby"
+          },
+          "downloadUrl": {
+            "type": "string",
+            "title": "Downloadurl"
+          },
+          "lastUpdatedAt": {
+            "type": "string",
+            "title": "Lastupdatedat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fileName",
+          "fileType",
+          "source",
+          "uploadedAt",
+          "downloadUrl",
+          "lastUpdatedAt"
+        ],
+        "title": "Attachment",
+        "description": "Case attachment."
+      },
+      "AttachmentSource": {
+        "type": "string",
+        "enum": [
+          "manual",
+          "ch",
+          "fca",
+          "db",
+          "ln",
+          "email"
+        ],
+        "title": "AttachmentSource",
+        "description": "Source of attachment."
+      },
+      "AutomationResults-Input": {
+        "properties": {
+          "companiesHouse": {
+            "$ref": "#/components/schemas/CompaniesHouseResult-Input"
+          },
+          "fca": {
+            "$ref": "#/components/schemas/FCAResult-Input"
+          },
+          "dAndB": {
+            "$ref": "#/components/schemas/DAndBResult-Input"
+          },
+          "lexisNexis": {
+            "$ref": "#/components/schemas/LexisNexisResult-Input"
+          }
+        },
+        "type": "object",
+        "required": [
+          "companiesHouse",
+          "fca",
+          "dAndB",
+          "lexisNexis"
+        ],
+        "title": "AutomationResults",
+        "description": "Container for all automation results."
+      },
+      "AutomationResults-Output": {
+        "properties": {
+          "companiesHouse": {
+            "$ref": "#/components/schemas/CompaniesHouseResult-Output"
+          },
+          "fca": {
+            "$ref": "#/components/schemas/FCAResult-Output"
+          },
+          "dAndB": {
+            "$ref": "#/components/schemas/DAndBResult-Output"
+          },
+          "lexisNexis": {
+            "$ref": "#/components/schemas/LexisNexisResult-Output"
+          }
+        },
+        "type": "object",
+        "required": [
+          "companiesHouse",
+          "fca",
+          "dAndB",
+          "lexisNexis"
+        ],
+        "title": "AutomationResults",
+        "description": "Container for all automation results."
+      },
+      "AutomationStatus": {
+        "type": "string",
+        "enum": [
+          "success",
+          "not_applicable",
+          "failed",
+          "pending"
+        ],
+        "title": "AutomationStatus",
+        "description": "Status of automation results."
+      },
+      "BEFormData": {
+        "properties": {
+          "legalName": {
+            "type": "string",
+            "title": "Legalname"
+          },
+          "tradingName": {
+            "type": "string",
+            "title": "Tradingname"
+          },
+          "country": {
+            "type": "string",
+            "title": "Country"
+          },
+          "roleType": {
+            "type": "string",
+            "title": "Roletype"
+          },
+          "addressLine1": {
+            "type": "string",
+            "title": "Addressline1"
+          },
+          "addressLine2": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Addressline2"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "postcode": {
+            "type": "string",
+            "title": "Postcode"
+          },
+          "registrationNumber": {
+            "type": "string",
+            "title": "Registrationnumber"
+          },
+          "customerType": {
+            "$ref": "#/components/schemas/CustomerType"
+          },
+          "cpiScore": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cpiscore"
+          },
+          "statementEmail": {
+            "type": "string",
+            "format": "email",
+            "title": "Statementemail"
+          },
+          "creditControllerEmail": {
+            "type": "string",
+            "format": "email",
+            "title": "Creditcontrolleremail"
+          },
+          "bankName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bankname"
+          },
+          "bankAccountNumber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bankaccountnumber"
+          },
+          "bankSortCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Banksortcode"
+          },
+          "bankDetailsRequired": {
+            "type": "boolean",
+            "title": "Bankdetailsrequired"
+          }
+        },
+        "type": "object",
+        "required": [
+          "legalName",
+          "tradingName",
+          "country",
+          "roleType",
+          "addressLine1",
+          "city",
+          "postcode",
+          "registrationNumber",
+          "customerType",
+          "statementEmail",
+          "creditControllerEmail",
+          "bankDetailsRequired"
+        ],
+        "title": "BEFormData",
+        "description": "BE Form Data for case."
+      },
+      "BankDetails": {
+        "properties": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          },
+          "bank_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bank Name"
+          },
+          "bank_account_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bank Account Name"
+          },
+          "swift_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Swift Code"
+          },
+          "sort_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sort Code"
+          },
+          "aba": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aba"
+          },
+          "iban": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Iban"
+          },
+          "account_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account Number"
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "bank_country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bank Country"
+          }
+        },
+        "type": "object",
+        "title": "BankDetails",
+        "description": "Bank account details."
+      },
+      "CaseCreate": {
+        "properties": {
+          "entityName": {
+            "type": "string",
+            "title": "Entityname"
+          },
+          "status": {
+            "$ref": "#/components/schemas/CaseStatus",
+            "default": "ONBOARDING_COMPLETE"
+          },
+          "riskTier": {
+            "$ref": "#/components/schemas/RiskTier"
+          },
+          "cpiScore": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cpiscore"
+          },
+          "assignedUser": {
+            "type": "string",
+            "title": "Assigneduser"
+          },
+          "businessUnit": {
+            "type": "string",
+            "title": "Businessunit"
+          },
+          "beForm": {
+            "$ref": "#/components/schemas/BEFormData"
+          },
+          "automationResults": {
+            "$ref": "#/components/schemas/AutomationResults-Input"
+          },
+          "attachments": {
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "type": "array",
+            "title": "Attachments",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "entityName",
+          "riskTier",
+          "assignedUser",
+          "businessUnit",
+          "beForm",
+          "automationResults"
+        ],
+        "title": "CaseCreate",
+        "description": "Model for creating a case (without ID)."
+      },
+      "CaseDetail": {
+        "properties": {
+          "_id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "entityName": {
+            "type": "string",
+            "title": "Entityname"
+          },
+          "status": {
+            "$ref": "#/components/schemas/CaseStatus"
+          },
+          "riskTier": {
+            "$ref": "#/components/schemas/RiskTier"
+          },
+          "cpiScore": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cpiscore"
+          },
+          "daysOpen": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daysopen"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "title": "Lastupdated"
+          },
+          "assignedUser": {
+            "type": "string",
+            "title": "Assigneduser"
+          },
+          "businessUnit": {
+            "type": "string",
+            "title": "Businessunit"
+          },
+          "beForm": {
+            "$ref": "#/components/schemas/BEFormData"
+          },
+          "automationResults": {
+            "$ref": "#/components/schemas/AutomationResults-Output"
+          },
+          "attachments": {
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "type": "array",
+            "title": "Attachments",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "_id",
+          "entityName",
+          "status",
+          "riskTier",
+          "createdAt",
+          "lastUpdated",
+          "assignedUser",
+          "businessUnit",
+          "beForm",
+          "automationResults"
+        ],
+        "title": "CaseDetail",
+        "description": "Complete case detail (GET /case/:id response)."
+      },
+      "CaseListItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "entityName": {
+            "type": "string",
+            "title": "Entityname"
+          },
+          "riskTier": {
+            "$ref": "#/components/schemas/RiskTier"
+          },
+          "assignedUser": {
+            "type": "string",
+            "title": "Assigneduser"
+          },
+          "status": {
+            "$ref": "#/components/schemas/CaseStatus"
+          },
+          "businessUnit": {
+            "type": "string",
+            "title": "Businessunit"
+          },
+          "roleType": {
+            "type": "string",
+            "title": "Roletype"
+          },
+          "daysOpen": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daysopen"
+          },
+          "daysSinceLastCustomerTouchpoint": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dayssincelastcustomertouchpoint"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "title": "Lastupdated"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "entityName",
+          "riskTier",
+          "assignedUser",
+          "status",
+          "businessUnit",
+          "roleType",
+          "lastUpdated",
+          "createdAt"
+        ],
+        "title": "CaseListItem",
+        "description": "Case list item (for GET /cases response)."
+      },
+      "CaseStatus": {
+        "type": "string",
+        "enum": [
+          "ONBOARDING_COMPLETE",
+          "AUTOMATION_IN_PROGRESS",
+          "AWAITING_KYC_REVIEW",
+          "AWAITING_EXTERNAL_RESPONSE",
+          "FINANCIAL_CRIME_REVIEW",
+          "READY_KYC_MANAGER_REVIEW",
+          "DIVISIONAL_APPROVAL_LOW_RISK",
+          "DIVISIONAL_APPROVAL_HIGH_RISK",
+          "AWAITING_SECURITY_COMMITTEE",
+          "READY_FOR_PAS",
+          "CREATED_IN_PAS",
+          "COMPLETED",
+          "REJECTED"
+        ],
+        "title": "CaseStatus",
+        "description": "Case workflow status."
+      },
+      "CasesListResponse": {
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/CaseListItem"
+            },
+            "type": "array",
+            "title": "Content"
+          },
+          "totalElements": {
+            "type": "integer",
+            "title": "Totalelements"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "pageSize": {
+            "type": "integer",
+            "title": "Pagesize"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content",
+          "totalElements",
+          "page",
+          "pageSize"
+        ],
+        "title": "CasesListResponse",
+        "description": "Paginated case list response."
+      },
+      "CompaniesHouseData": {
+        "properties": {
+          "legalEntityName": {
+            "type": "string",
+            "title": "Legalentityname"
+          },
+          "registrationNumber": {
+            "type": "string",
+            "title": "Registrationnumber"
+          },
+          "registeredAddress": {
+            "type": "string",
+            "title": "Registeredaddress"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "dissolvedOn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dissolvedon"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "incorporatedOn": {
+            "type": "string",
+            "title": "Incorporatedon"
+          },
+          "accounts": {
+            "type": "string",
+            "title": "Accounts"
+          },
+          "confirmationStatement": {
+            "type": "string",
+            "title": "Confirmationstatement"
+          },
+          "natureOfBusiness": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Natureofbusiness"
+          },
+          "directors": {
+            "items": {
+              "$ref": "#/components/schemas/CompaniesHouseDirector"
+            },
+            "type": "array",
+            "title": "Directors"
+          },
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/CompaniesHouseDocument"
+            },
+            "type": "array",
+            "title": "Documents"
+          },
+          "externalUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Externalurl"
+          }
+        },
+        "type": "object",
+        "required": [
+          "legalEntityName",
+          "registrationNumber",
+          "registeredAddress",
+          "status",
+          "type",
+          "incorporatedOn",
+          "accounts",
+          "confirmationStatement",
+          "natureOfBusiness",
+          "directors",
+          "documents"
+        ],
+        "title": "CompaniesHouseData",
+        "description": "Companies House automation data."
+      },
+      "CompaniesHouseDirector": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "status"
+        ],
+        "title": "CompaniesHouseDirector",
+        "description": "Companies House director information."
+      },
+      "CompaniesHouseDocument": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "fileName": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fileName",
+          "type",
+          "url"
+        ],
+        "title": "CompaniesHouseDocument",
+        "description": "Companies House document."
+      },
+      "CompaniesHouseResult-Input": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AutomationStatus"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CompaniesHouseData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "CompaniesHouseResult",
+        "description": "Companies House automation result."
+      },
+      "CompaniesHouseResult-Output": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AutomationStatus"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CompaniesHouseData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "CompaniesHouseResult",
+        "description": "Companies House automation result."
+      },
+      "CustomerType": {
+        "type": "string",
+        "enum": [
+          "Micro",
+          "Small",
+          "Medium",
+          "Large",
+          "Consumer"
+        ],
+        "title": "CustomerType",
+        "description": "Customer size classification."
+      },
+      "DAndBData": {
+        "properties": {
+          "dunsNumber": {
+            "type": "string",
+            "title": "Dunsnumber"
+          },
+          "legalName": {
+            "type": "string",
+            "title": "Legalname"
+          },
+          "registeredAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "principalInformation": {
+            "items": {
+              "$ref": "#/components/schemas/DAndBPrincipal"
+            },
+            "type": "array",
+            "title": "Principalinformation"
+          },
+          "shareholding": {
+            "items": {
+              "$ref": "#/components/schemas/DAndBShareholder"
+            },
+            "type": "array",
+            "title": "Shareholding"
+          },
+          "ubo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ubo"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "title": "Lastupdated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dunsNumber",
+          "legalName",
+          "registeredAddress",
+          "principalInformation",
+          "shareholding",
+          "lastUpdated"
+        ],
+        "title": "DAndBData",
+        "description": "D&B automation data."
+      },
+      "DAndBPrincipal": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "title"
+        ],
+        "title": "DAndBPrincipal",
+        "description": "D&B principal information."
+      },
+      "DAndBResult-Input": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AutomationStatus"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DAndBData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "DAndBResult",
+        "description": "D&B automation result."
+      },
+      "DAndBResult-Output": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AutomationStatus"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DAndBData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "DAndBResult",
+        "description": "D&B automation result."
+      },
+      "DAndBShareholder": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "percentageOwned": {
+            "type": "number",
+            "title": "Percentageowned"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "percentageOwned"
+        ],
+        "title": "DAndBShareholder",
+        "description": "D&B shareholder information."
+      },
+      "FCAAdditionalInformation": {
+        "properties": {
+          "appointedRepresentatives": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Appointedrepresentatives"
+          },
+          "keyIndividuals": {
+            "items": {
+              "$ref": "#/components/schemas/FCAKeyIndividual"
+            },
+            "type": "array",
+            "title": "Keyindividuals"
+          },
+          "passportingRights": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Passportingrights"
+          },
+          "tradingNames": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tradingnames"
+          }
+        },
+        "type": "object",
+        "required": [
+          "appointedRepresentatives",
+          "keyIndividuals",
+          "passportingRights",
+          "tradingNames"
+        ],
+        "title": "FCAAdditionalInformation",
+        "description": "FCA additional information."
+      },
+      "FCAData-Input": {
+        "properties": {
+          "frn": {
+            "type": "string",
+            "title": "Frn"
+          },
+          "organisationName": {
+            "type": "string",
+            "title": "Organisationname"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "effectiveDate": {
+            "type": "string",
+            "title": "Effectivedate"
+          },
+          "businessType": {
+            "type": "string",
+            "title": "Businesstype"
+          },
+          "clientMoneyPermissions": {
+            "type": "boolean",
+            "title": "Clientmoneypermissions"
+          },
+          "psdAgentStatus": {
+            "type": "string",
+            "title": "Psdagentstatus"
+          },
+          "psdEmdStatus": {
+            "type": "string",
+            "title": "Psdemdstatus"
+          },
+          "authorisedActivities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authorisedactivities"
+          },
+          "registeredAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "regulatoryInformation": {
+            "$ref": "#/components/schemas/FCARegulatoryInformation"
+          },
+          "additionalInformation": {
+            "$ref": "#/components/schemas/FCAAdditionalInformation"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "title": "Lastupdated"
+          },
+          "externalUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Externalurl"
+          }
+        },
+        "type": "object",
+        "required": [
+          "frn",
+          "organisationName",
+          "status",
+          "effectiveDate",
+          "businessType",
+          "clientMoneyPermissions",
+          "psdAgentStatus",
+          "psdEmdStatus",
+          "authorisedActivities",
+          "registeredAddress",
+          "regulatoryInformation",
+          "additionalInformation",
+          "lastUpdated"
+        ],
+        "title": "FCAData",
+        "description": "FCA automation data."
+      },
+      "FCAData-Output": {
+        "properties": {
+          "frn": {
+            "type": "string",
+            "title": "Frn"
+          },
+          "organisationName": {
+            "type": "string",
+            "title": "Organisationname"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "effectiveDate": {
+            "type": "string",
+            "title": "Effectivedate"
+          },
+          "businessType": {
+            "type": "string",
+            "title": "Businesstype"
+          },
+          "clientMoneyPermissions": {
+            "type": "boolean",
+            "title": "Clientmoneypermissions"
+          },
+          "psdAgentStatus": {
+            "type": "string",
+            "title": "Psdagentstatus"
+          },
+          "psdEmdStatus": {
+            "type": "string",
+            "title": "Psdemdstatus"
+          },
+          "authorisedActivities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authorisedactivities"
+          },
+          "registeredAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "regulatoryInformation": {
+            "$ref": "#/components/schemas/FCARegulatoryInformation"
+          },
+          "additionalInformation": {
+            "$ref": "#/components/schemas/FCAAdditionalInformation"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "title": "Lastupdated"
+          },
+          "externalUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Externalurl"
+          }
+        },
+        "type": "object",
+        "required": [
+          "frn",
+          "organisationName",
+          "status",
+          "effectiveDate",
+          "businessType",
+          "clientMoneyPermissions",
+          "psdAgentStatus",
+          "psdEmdStatus",
+          "authorisedActivities",
+          "registeredAddress",
+          "regulatoryInformation",
+          "additionalInformation",
+          "lastUpdated"
+        ],
+        "title": "FCAData",
+        "description": "FCA automation data."
+      },
+      "FCAKeyIndividual": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roles"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "roles"
+        ],
+        "title": "FCAKeyIndividual",
+        "description": "FCA key individual."
+      },
+      "FCARegulatoryInformation": {
+        "properties": {
+          "regulators": {
+            "type": "string",
+            "title": "Regulators"
+          },
+          "requirements": {
+            "type": "string",
+            "title": "Requirements"
+          },
+          "waivers": {
+            "type": "string",
+            "title": "Waivers"
+          },
+          "exclusions": {
+            "type": "string",
+            "title": "Exclusions"
+          },
+          "disciplinaryHistory": {
+            "type": "string",
+            "title": "Disciplinaryhistory"
+          }
+        },
+        "type": "object",
+        "required": [
+          "regulators",
+          "requirements",
+          "waivers",
+          "exclusions",
+          "disciplinaryHistory"
+        ],
+        "title": "FCARegulatoryInformation",
+        "description": "FCA regulatory information."
+      },
+      "FCAResult-Input": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AutomationStatus"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FCAData-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "FCAResult",
+        "description": "FCA automation result."
+      },
+      "FCAResult-Output": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AutomationStatus"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FCAData-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "FCAResult",
+        "description": "FCA automation result."
+      },
+      "FileType": {
+        "type": "string",
+        "enum": [
+          "PDF",
+          "DOC",
+          "DOCX",
+          "CSV",
+          "XLSX",
+          "MSG"
+        ],
+        "title": "FileType",
+        "description": "Attachment file types."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LexisNexisFinCrimeApproval": {
+        "properties": {
+          "approvedBy": {
+            "type": "string",
+            "title": "Approvedby"
+          },
+          "approvedAt": {
+            "type": "string",
+            "title": "Approvedat"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "rejected"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "approvedBy",
+          "approvedAt",
+          "status"
+        ],
+        "title": "LexisNexisFinCrimeApproval",
+        "description": "Financial Crime approval for LexisNexis match."
+      },
+      "LexisNexisMatch": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "company",
+              "individual"
+            ],
+            "title": "Type"
+          },
+          "matchScore": {
+            "type": "number",
+            "title": "Matchscore"
+          },
+          "sourceName": {
+            "type": "string",
+            "title": "Sourcename"
+          },
+          "countries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Countries"
+          },
+          "reasonListed": {
+            "type": "string",
+            "title": "Reasonlisted"
+          },
+          "comments": {
+            "type": "string",
+            "title": "Comments"
+          },
+          "dateOfBirth": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dateofbirth"
+          },
+          "resolution": {
+            "$ref": "#/components/schemas/LexisNexisResolution"
+          },
+          "resolutionNote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolutionnote"
+          },
+          "resolvedBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolvedby"
+          },
+          "resolvedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolvedat"
+          },
+          "finCrimeApproval": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LexisNexisFinCrimeApproval"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "matchScore",
+          "sourceName",
+          "countries",
+          "reasonListed",
+          "comments",
+          "resolution"
+        ],
+        "title": "LexisNexisMatch",
+        "description": "LexisNexis sanction/PEP match."
+      },
+      "LexisNexisResolution": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "discounted",
+          "accepted",
+          "escalated"
+        ],
+        "title": "LexisNexisResolution",
+        "description": "LexisNexis match resolution status."
+      },
+      "LexisNexisResult-Input": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AutomationStatus"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/LexisNexisMatch"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "LexisNexisResult",
+        "description": "LexisNexis automation result."
+      },
+      "LexisNexisResult-Output": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AutomationStatus"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/LexisNexisMatch"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "LexisNexisResult",
+        "description": "LexisNexis automation result."
+      },
+      "PASClientProcess": {
+        "properties": {
+          "process": {
+            "type": "string",
+            "title": "Process",
+            "default": "CLIENT"
+          },
+          "extractionId": {
+            "type": "string",
+            "title": "Extractionid"
+          },
+          "multidivision": {
+            "type": "boolean",
+            "title": "Multidivision"
+          },
+          "sentToRpaBy": {
+            "type": "string",
+            "format": "email",
+            "title": "Senttorpaby"
+          },
+          "statementEmail": {
+            "type": "string",
+            "format": "email",
+            "title": "Statementemail"
+          },
+          "entityName": {
+            "type": "string",
+            "title": "Entityname"
+          },
+          "businessOrTradingName": {
+            "type": "string",
+            "title": "Businessortradingname"
+          },
+          "system": {
+            "type": "string",
+            "title": "System"
+          },
+          "requestedBy": {
+            "type": "string",
+            "title": "Requestedby"
+          },
+          "businessUnit": {
+            "type": "string",
+            "title": "Businessunit"
+          },
+          "dateUploaded": {
+            "type": "string",
+            "format": "date",
+            "title": "Dateuploaded"
+          },
+          "reviewDate": {
+            "type": "string",
+            "format": "date",
+            "title": "Reviewdate"
+          },
+          "accountRoleType": {
+            "type": "string",
+            "title": "Accountroletype"
+          },
+          "requestPurpose": {
+            "type": "string",
+            "title": "Requestpurpose"
+          },
+          "accountReference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accountreference"
+          },
+          "toba": {
+            "$ref": "#/components/schemas/TOBA"
+          },
+          "territoryCode": {
+            "type": "string",
+            "title": "Territorycode"
+          },
+          "addresses": {
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "type": "array",
+            "title": "Addresses"
+          },
+          "bankDetails": {
+            "items": {
+              "$ref": "#/components/schemas/BankDetails"
+            },
+            "type": "array",
+            "title": "Bankdetails"
+          },
+          "customerType": {
+            "type": "string",
+            "title": "Customertype"
+          },
+          "regulationStatus": {
+            "type": "string",
+            "title": "Regulationstatus"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "fcaReference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fcareference"
+          },
+          "subcategory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subcategory"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "changeType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Changetype"
+          }
+        },
+        "type": "object",
+        "required": [
+          "extractionId",
+          "multidivision",
+          "sentToRpaBy",
+          "statementEmail",
+          "entityName",
+          "businessOrTradingName",
+          "system",
+          "requestedBy",
+          "businessUnit",
+          "dateUploaded",
+          "reviewDate",
+          "accountRoleType",
+          "requestPurpose",
+          "toba",
+          "territoryCode",
+          "addresses",
+          "bankDetails",
+          "customerType",
+          "regulationStatus",
+          "status"
+        ],
+        "title": "PASClientProcess",
+        "description": "PAS Client Process schema model."
+      },
+      "RiskTier": {
+        "type": "string",
+        "enum": [
+          "Higher Risk",
+          "Lower Risk"
+        ],
+        "title": "RiskTier",
+        "description": "Risk tier classification."
+      },
+      "TOBA": {
+        "properties": {
+          "dateAgreedSent": {
+            "type": "string",
+            "format": "date",
+            "title": "Dateagreedsent"
+          },
+          "tobaType": {
+            "type": "string",
+            "title": "Tobatype"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dateAgreedSent",
+          "tobaType"
+        ],
+        "title": "TOBA",
+        "description": "Terms of Business Agreement."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://37.27.255.95:8090",
+      "description": "Production API Server"
+    }
+  ]
+}
