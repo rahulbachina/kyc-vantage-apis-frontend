@@ -11,8 +11,8 @@ export type Attachment = components['schemas']['Attachment'];
 
 // Create Axios
 // Use proxy in production to avoid CORS, direct API in development
-const isDevelopment = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-const baseURL = isDevelopment
+// In development (localhost), use direct API. In production (Vercel), use proxy.
+const baseURL = process.env.NODE_ENV === 'development'
   ? (process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://37.27.255.95:8090')
   : '/api/proxy';
 
