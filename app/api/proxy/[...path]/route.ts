@@ -4,9 +4,10 @@ const API_BASE_URL = 'http://37.27.255.95:8090';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
-  const path = params.path.join('/');
+  const { path: pathArray } = await params;
+  const path = pathArray.join('/');
   const searchParams = request.nextUrl.searchParams;
   const queryString = searchParams.toString();
   const url = `${API_BASE_URL}/${path}${queryString ? `?${queryString}` : ''}`;
@@ -29,9 +30,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
-  const path = params.path.join('/');
+  const { path: pathArray } = await params;
+  const path = pathArray.join('/');
   const body = await request.json();
   const url = `${API_BASE_URL}/${path}`;
 
@@ -54,9 +56,10 @@ export async function POST(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
-  const path = params.path.join('/');
+  const { path: pathArray } = await params;
+  const path = pathArray.join('/');
   const body = await request.json();
   const url = `${API_BASE_URL}/${path}`;
 
@@ -79,9 +82,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
-  const path = params.path.join('/');
+  const { path: pathArray } = await params;
+  const path = pathArray.join('/');
   const url = `${API_BASE_URL}/${path}`;
 
   try {
