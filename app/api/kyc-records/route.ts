@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
   const url = `${API_BASE_URL}/api/kyc-records`;
 
   console.log('[Proxy POST /api/kyc-records]', url);
+  console.log('[Proxy POST] Request body:', JSON.stringify(body, null, 2));
 
   try {
     const response = await fetch(url, {
@@ -80,6 +81,14 @@ export async function POST(request: NextRequest) {
     });
 
     const data = await response.json();
+
+    // If the backend returned an error (4xx or 5xx), return it with the proper status
+    if (!response.ok) {
+      console.error('[Proxy POST] Backend error:', response.status, data);
+      return NextResponse.json(data, { status: response.status });
+    }
+
+    console.log('[Proxy POST] Success:', data);
     return NextResponse.json(data);
   } catch (error) {
     console.error('Proxy error:', error);

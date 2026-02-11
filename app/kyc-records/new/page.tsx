@@ -5,6 +5,7 @@ import { useCreateCase } from "@/hooks/useCases"
 import { CaseFormValues } from "@/schemas/case.schema"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { transformFormToKYCRecord } from "@/lib/api/transformers"
 
 export default function CreateCasePage() {
     const router = useRouter()
@@ -12,24 +13,41 @@ export default function CreateCasePage() {
 
     const handleSubmit = async (data: CaseFormValues) => {
         try {
-            // Ensure required fields for API are present, defaulting if form didn't capture them
-            const payload = {
-                ...data,
-                // Default automation results for new case if not in form data
-                automationResults: data.automationResults || {
-                    companiesHouse: { status: "pending" },
-                    fca: { status: "pending" },
-                    dAndB: { status: "pending" },
-                    lexisNexis: { status: "pending" }
-                } as any,
-                attachments: data.attachments || [],
-            }
-            await createMutation.mutateAsync(payload)
+            // Transform frontend form data to backend KYC Master Record format
+            const payload = transformFormToKYCRecord(data)
+
+            console.log('Submitting KYC record:', payload)
+            await createMutation.mutateAsync(payload as any)
             toast.success("Case created successfully")
             router.push("/kyc-records")
-        } catch (error) {
-            toast.error("Failed to create case")
-            console.error(error)
+        } catch (error: any) {
+            console.error('Create case error:', error)
+
+            // Handle validation errors from backend
+            if (error.response?.status === 422) {
+                const validationData = error.response?.data
+                if (validationData?.errors && Array.isArray(validationData.errors)) {
+                    // Show each validation error
+                    validationData.errors.forEach((err: any) => {
+                        toast.error(err.message || `Validation error: ${err.field}`)
+                    })
+                    toast.error(validationData.detail || "Validation failed - please check all required fields")
+                } else if (validationData?.detail) {
+                    // Show generic validation error
+                    toast.error(typeof validationData.detail === 'string'
+                        ? validationData.detail
+                        : "Validation failed - please check all required fields")
+                } else {
+                    toast.error("Some required fields are missing or invalid")
+                }
+            } else {
+                // Show generic error for other error types
+                const errorMessage = error.response?.data?.message
+                    || error.response?.data?.detail
+                    || error.message
+                    || "Failed to create case"
+                toast.error(errorMessage)
+            }
         }
     }
 

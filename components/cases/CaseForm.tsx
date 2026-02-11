@@ -38,9 +38,16 @@ interface CaseFormProps {
 export function CaseForm({ defaultValues, onSubmit, isLoading, isEdit }: CaseFormProps) {
     const router = useRouter()
 
+    // Generate a GUID for new cases
+    const generateCaseId = () => {
+        return 'KYC-' + crypto.randomUUID().substring(0, 8).toUpperCase()
+    }
+
     const initialDefaults: CaseFormValues = {
+        caseId: isEdit ? "" : generateCaseId(),
+        clientRef: "",
         entityName: "",
-        status: "ONBOARDING_COMPLETE",
+        status: "DRAFT",
         riskTier: "Lower Risk",
         assignedUser: "",
         businessUnit: "",
@@ -119,9 +126,38 @@ export function CaseForm({ defaultValues, onSubmit, isLoading, isEdit }: CaseFor
                 )}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Case Information</CardTitle>
+                        <CardTitle>Key Facts</CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-8 md:grid-cols-2">
+                        <FormField
+                            control={form.control}
+                            name="caseId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Case ID</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="KYC-XXXXXXXX" {...field} readOnly={!isEdit} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        {!isEdit && "Auto-generated case identifier"}
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="clientRef"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Client Reference</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="REF-12345" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="entityName"
@@ -205,11 +241,16 @@ export function CaseForm({ defaultValues, onSubmit, isLoading, isEdit }: CaseFor
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent position="popper" sideOffset={4}>
-                                                <SelectItem value="ONBOARDING_COMPLETE">Onboarding Complete</SelectItem>
-                                                <SelectItem value="AUTOMATION_IN_PROGRESS">Automation In Progress</SelectItem>
-                                                <SelectItem value="AWAITING_KYC_REVIEW">Awaiting KYC Review</SelectItem>
-                                                <SelectItem value="COMPLETED">Completed</SelectItem>
+                                                <SelectItem value="DRAFT">Draft</SelectItem>
+                                                <SelectItem value="SUBMITTED">Submitted</SelectItem>
+                                                <SelectItem value="ENRICHED">Enriched</SelectItem>
+                                                <SelectItem value="UNDER_REVIEW">Under Review</SelectItem>
+                                                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                                                <SelectItem value="APPROVED">Approved</SelectItem>
                                                 <SelectItem value="REJECTED">Rejected</SelectItem>
+                                                <SelectItem value="ON_HOLD">On Hold</SelectItem>
+                                                <SelectItem value="AWAITING_EXTERNAL_RESPONSE">Awaiting External Response</SelectItem>
+                                                <SelectItem value="ONBOARDING_COMPLETE">Onboarding Complete</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -222,7 +263,7 @@ export function CaseForm({ defaultValues, onSubmit, isLoading, isEdit }: CaseFor
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>BE Form Details</CardTitle>
+                        <CardTitle>Case Details</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="grid gap-8 md:grid-cols-2">
