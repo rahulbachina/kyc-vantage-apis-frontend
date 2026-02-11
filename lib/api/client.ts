@@ -10,9 +10,8 @@ export type CasesListResponse = components['schemas']['CasesListResponse'];
 export type Attachment = components['schemas']['Attachment'];
 
 // Create Axios
-// Use /api routes which act as proxy to backend
-// These are Next.js API routes that forward to the backend API
-const baseURL = '/api';
+// Use direct API URL if provided, otherwise use /api proxy routes
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
 
 const client: AxiosInstance = axios.create({
   baseURL,
@@ -31,7 +30,11 @@ client.interceptors.response.use(
       statusText: error.response?.statusText,
       data: error.response?.data,
       url: error.config?.url,
-      message: error.message
+      baseURL: error.config?.baseURL,
+      message: error.message,
+      code: error.code,
+      name: error.name,
+      stack: error.stack
     });
     return Promise.reject(error);
   }
@@ -101,17 +104,21 @@ export const api = {
               item.entityName.toLowerCase() !== 'string' &&
               item.entityName !== 'String';
 
-            const hasValidBusinessUnit = item.businessUnit &&
-              item.businessUnit.toLowerCase() !== 'string' &&
-              item.businessUnit !== 'String';
-
-            return hasValidEntityName && hasValidBusinessUnit;
+            return hasValidEntityName;
           })
           .map((item: any) => {
             console.log('[API] Processing valid item:', item);
             return {
               ...item,
               id: item.id || item._id, // Ensure id exists
+              // Map QueryDog API fields to frontend expected fields
+              businessUnit: item.jurisdiction || 'N/A',
+              riskTier: item.primaryRole || 'Unknown',
+              assignedUser: '-', // QueryDog API doesn't have assigned user
+              // Keep original fields for reference
+              caseId: item.caseId,
+              clientRef: item.clientRef,
+              relationshipType: item.relationshipType,
             };
           });
 
