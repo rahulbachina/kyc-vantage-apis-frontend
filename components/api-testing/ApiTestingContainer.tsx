@@ -13,7 +13,7 @@ export function ApiTestingContainer() {
       {/* Header */}
       <div>
         <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-          KYC Automation Plan Test Harness
+          KYC Automation Third Party API Test Harness
         </h2>
         <p className="text-muted-foreground mt-1">
           Test and validate third-party API integrations
