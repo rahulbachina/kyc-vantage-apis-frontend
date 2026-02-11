@@ -61,15 +61,6 @@ export default function RootLayout({
                 {children}
               </div>
             </main>
-
-            {/* Footer */}
-            <footer className="ml-64 border-t bg-white">
-              <div className="px-6 py-4">
-                <p className="text-center text-sm text-muted-foreground">
-                  © 2025 Ardonagh Specialities. All rights reserved.
-                </p>
-              </div>
-            </footer>
           </div>
         </AppProviders>
       </body>

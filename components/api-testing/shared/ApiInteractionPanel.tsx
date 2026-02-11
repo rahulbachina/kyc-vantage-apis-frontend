@@ -22,7 +22,7 @@ interface ApiInteractionPanelProps {
 }
 
 export function ApiInteractionPanel({ request, response, timestamp }: ApiInteractionPanelProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   if (!request && !response) return null;
 

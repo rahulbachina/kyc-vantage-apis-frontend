@@ -143,7 +143,7 @@ export function CompaniesHouseTab() {
       )}
 
       {/* API Interaction Panel */}
-      {searchQuery && !searchLoading && (
+      {searchQuery && (
         <ApiInteractionPanel
           request={{
             url: `https://api.company-information.service.gov.uk/search/companies?q=${encodeURIComponent(searchQuery)}`,
@@ -153,7 +153,7 @@ export function CompaniesHouseTab() {
               'Accept': 'application/json'
             }
           }}
-          response={searchResults ? {
+          response={!searchLoading && searchResults ? {
             status: 200,
             statusText: 'OK',
             headers: {

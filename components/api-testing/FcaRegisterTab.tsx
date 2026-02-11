@@ -146,7 +146,7 @@ export function FcaRegisterTab() {
       )}
 
       {/* API Interaction Panel */}
-      {searchQuery && !searchLoading && (
+      {searchQuery && (
         <ApiInteractionPanel
           request={{
             url: `https://register.fca.org.uk/services/V0.1/Firm?q=${encodeURIComponent(searchQuery)}`,
@@ -156,7 +156,7 @@ export function FcaRegisterTab() {
               'X-API-Key': '[REDACTED]'
             }
           }}
-          response={searchResults ? {
+          response={!searchLoading && searchResults ? {
             status: 200,
             statusText: 'OK',
             headers: {
