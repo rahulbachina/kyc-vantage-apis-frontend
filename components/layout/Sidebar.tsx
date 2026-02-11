@@ -54,17 +54,6 @@ export function Sidebar() {
     return (
         <aside className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 border-r bg-white shadow-sm overflow-y-auto">
             <div className="p-4 space-y-6">
-                {/* Logo/Brand Section */}
-                <div className="flex items-center gap-3 px-2 py-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md">
-                        <ShieldCheck className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                        <h2 className="font-bold text-sm text-gray-900">Vantage KYC</h2>
-                        <p className="text-xs text-gray-600">Case Management</p>
-                    </div>
-                </div>
-
                 {/* Menu Sections */}
                 {menuItems.map((section) => (
                     <div key={section.title} className="space-y-2">
