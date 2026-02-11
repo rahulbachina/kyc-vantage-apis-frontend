@@ -58,9 +58,6 @@ export default function CasesPage() {
                     <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                         KYC Automation Core API Test Harness
                     </h2>
-                    <p className="text-muted-foreground mt-1">
-                        Manage and track all KYC cases across your organization
-                    </p>
                 </div>
                 <Link href="/cases/new">
                     <Button size="lg" className="shadow-md hover:shadow-lg transition-all">
