@@ -21,40 +21,42 @@ export function ApiTestingContainer() {
       </div>
 
       {/* Tabs */}
-      <Card className="shadow-md">
+      <Card className="shadow-md overflow-hidden">
         <Tabs defaultValue="companies-house" className="w-full">
-          <TabsList className="w-full flex flex-wrap justify-start gap-2 p-4 pt-6 bg-muted/30 rounded-none border-b">
-            <TabsTrigger
-              value="companies-house"
-              className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              <Building2 size={18} />
-              Companies House
-            </TabsTrigger>
-            <TabsTrigger
-              value="fca"
-              className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              <Shield size={18} />
-              FCA Register
-            </TabsTrigger>
-            <TabsTrigger
-              value="lexisnexis"
-              disabled
-              className="flex items-center gap-2 opacity-50 cursor-not-allowed"
-            >
-              <Database size={18} />
-              LexisNexis
-            </TabsTrigger>
-            <TabsTrigger
-              value="dnb"
-              disabled
-              className="flex items-center gap-2 opacity-50 cursor-not-allowed"
-            >
-              <Briefcase size={18} />
-              Dun & Bradstreet
-            </TabsTrigger>
-          </TabsList>
+          <div className="pt-4 px-4 pb-0 bg-muted/30 border-b">
+            <TabsList className="w-full flex flex-wrap justify-start gap-2 p-0 bg-transparent h-auto">
+              <TabsTrigger
+                value="companies-house"
+                className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                <Building2 size={18} />
+                Companies House
+              </TabsTrigger>
+              <TabsTrigger
+                value="fca"
+                className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                <Shield size={18} />
+                FCA Register
+              </TabsTrigger>
+              <TabsTrigger
+                value="lexisnexis"
+                disabled
+                className="flex items-center gap-2 opacity-50 cursor-not-allowed"
+              >
+                <Database size={18} />
+                LexisNexis
+              </TabsTrigger>
+              <TabsTrigger
+                value="dnb"
+                disabled
+                className="flex items-center gap-2 opacity-50 cursor-not-allowed"
+              >
+                <Briefcase size={18} />
+                Dun & Bradstreet
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <div className="p-6">
             <TabsContent value="companies-house" className="mt-0">
