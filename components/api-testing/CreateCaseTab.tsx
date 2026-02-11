@@ -125,7 +125,16 @@ export function CreateCaseTab() {
         documents: [],
         flags: [],
         approvals: [],
+        decision: {
+          outcome: null,
+          decidedBy: null,
+          decidedAt: null,
+          rationale: null,
+        },
+        changeHistory: [],
       };
+
+      console.log('Sending payload:', JSON.stringify(payload, null, 2));
 
       const res = await fetch('/api/cases', {
         method: 'POST',
@@ -136,9 +145,16 @@ export function CreateCaseTab() {
       });
 
       const data = await res.json();
+      console.log('API Response:', data);
 
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to create KYC record');
+        // Extract detailed validation errors if available
+        const errorMessage = data.detail
+          ? (Array.isArray(data.detail)
+              ? data.detail.map((e: any) => `${e.loc?.join('.')}: ${e.msg}`).join(', ')
+              : JSON.stringify(data.detail))
+          : (data.error || 'Failed to create KYC record');
+        throw new Error(errorMessage);
       }
 
       setResponse(data);
