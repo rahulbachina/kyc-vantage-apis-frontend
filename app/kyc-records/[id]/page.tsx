@@ -65,7 +65,7 @@ export default function CaseDetailPage() {
             const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '/api'
             setApiInteraction({
                 request: {
-                    url: `${baseUrl}/cases/${id}`,
+                    url: `${baseUrl}/kyc-records/${id}`,
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -109,7 +109,7 @@ export default function CaseDetailPage() {
         try {
             await deleteMutation.mutateAsync(id)
             toast.success("Case deleted successfully")
-            router.push("/cases")
+            router.push("/kyc-records")
         } catch (error) {
             toast.error("Failed to delete case")
         }
@@ -180,7 +180,7 @@ export default function CaseDetailPage() {
                     <div className="flex items-center gap-2">
                         <Button
                             variant="outline"
-                            onClick={() => router.push(`/cases/${id}/edit`)}
+                            onClick={() => router.push(`/kyc-records/${id}/edit`)}
                             className="shadow-sm"
                         >
                             <Edit className="mr-2 h-4 w-4" /> Edit
@@ -517,7 +517,7 @@ export default function CaseDetailPage() {
             {/* Send to PAS Button */}
             <div className="flex justify-end pt-6">
                 <Button
-                    onClick={() => router.push(`/cases/${id}/send-to-pas`)}
+                    onClick={() => router.push(`/kyc-records/${id}/send-to-pas`)}
                     size="lg"
                     className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all"
                 >

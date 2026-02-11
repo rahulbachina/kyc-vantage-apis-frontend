@@ -6,7 +6,6 @@ const API_BASE_URL = 'http://querydog.benjaminwootton.com:8090';
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const queryString = searchParams.toString();
-  // Changed endpoint from /api/cases to /api/kyc-records
   const url = `${API_BASE_URL}/api/kyc-records${queryString ? `?${queryString}` : ''}`;
 
   console.log('[Proxy GET /api/kyc-records]', url);
@@ -67,7 +66,6 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  // Changed endpoint from /api/cases to /api/kyc-records
   const url = `${API_BASE_URL}/api/kyc-records`;
 
   console.log('[Proxy POST /api/kyc-records]', url);

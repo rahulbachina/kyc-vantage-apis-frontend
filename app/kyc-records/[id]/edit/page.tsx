@@ -34,7 +34,7 @@ export default function EditCasePage() {
 
             await updateMutation.mutateAsync({ id, data: payload })
             toast.success("Case updated successfully")
-            router.push(`/cases/${id}`)
+            router.push(`/kyc-records/${id}`)
         } catch (error) {
             toast.error("Failed to update case")
             console.error(error)

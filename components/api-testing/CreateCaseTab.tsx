@@ -26,13 +26,9 @@ const createKYCSchema = z.object({
   legalName: z.string().min(1, 'Legal Name is required'),
   jurisdiction: z.string().min(1, 'Jurisdiction is required'),
   contactEmail: z.string().email('Valid email address is required'),
-  relationshipType: z.enum(['NEW', 'EXISTING'], {
-    required_error: 'Relationship Type is required',
-  }),
+  relationshipType: z.enum(['NEW', 'EXISTING']),
   systemRequired: z.string().min(1, 'System Required is required'),
-  primaryRole: z.enum(['CLIENT', 'UNDERWRITER', 'BROKER', 'REINSURER', 'COVERHOLDER', 'MANAGING_AGENT'], {
-    required_error: 'Primary Role is required',
-  }),
+  primaryRole: z.enum(['CLIENT', 'UNDERWRITER', 'BROKER', 'REINSURER', 'COVERHOLDER', 'MANAGING_AGENT']),
   subType: z.string().optional(),
   ruleSetId: z.string().min(1, 'Rule Set ID is required'),
 });
@@ -121,7 +117,7 @@ export function CreateCaseTab() {
 
       console.log('Sending payload:', JSON.stringify(payload, null, 2));
 
-      const res = await fetch('/api/cases', {
+      const res = await fetch('/api/kyc-records', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

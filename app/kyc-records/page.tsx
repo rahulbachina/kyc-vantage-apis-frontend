@@ -50,7 +50,7 @@ export default function CasesPage() {
 
             setApiInteraction({
                 request: {
-                    url: `${baseUrl}/cases${queryString ? `?${queryString}` : ''}`,
+                    url: `${baseUrl}/kyc-records${queryString ? `?${queryString}` : ''}`,
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -104,7 +104,7 @@ export default function CasesPage() {
                         KYC Automation Core API Test Harness
                     </h2>
                 </div>
-                <Link href="/cases/new">
+                <Link href="/kyc-records/new">
                     <Button size="lg" className="shadow-md hover:shadow-lg transition-all">
                         <PlusCircle className="mr-2 h-5 w-5" />
                         Create New Case

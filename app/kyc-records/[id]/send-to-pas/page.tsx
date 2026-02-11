@@ -52,7 +52,7 @@ export default function SendToPasPage() {
         mutationFn: (values: SendToPasValues) => api.cases.sendToPas(id, values),
         onSuccess: () => {
             toast.success("Case sent to PAS successfully")
-            router.push(`/cases/${id}`)
+            router.push(`/kyc-records/${id}`)
         },
         onError: (error) => {
             toast.error("Failed to send to PAS")

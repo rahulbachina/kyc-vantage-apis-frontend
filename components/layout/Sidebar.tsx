@@ -20,8 +20,8 @@ const menuItems = [
     {
         title: "Testing - Core",
         items: [
-            { name: "All Cases", href: "/cases", icon: FolderOpen },
-            { name: "Create Case", href: "/cases/new", icon: PlusCircle },
+            { name: "All Cases", href: "/kyc-records", icon: FolderOpen },
+            { name: "Create Case", href: "/kyc-records/new", icon: PlusCircle },
         ]
     },
     {

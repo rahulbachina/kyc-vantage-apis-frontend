@@ -30,6 +30,15 @@
   --radius-xl: 0.75rem;
 }
 
+/* Form validation error styles */
+[data-invalid] {
+  border-color: #ef4444 !important;
+}
+
+.text-destructive {
+  color: #ef4444 !important;
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);

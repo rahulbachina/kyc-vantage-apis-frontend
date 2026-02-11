@@ -137,7 +137,7 @@ export function CasesTable({ cases, isLoading, onSort, sortBy, sortOrder }: Case
                             <TableRow
                                 key={c.id}
                                 className="cursor-pointer hover:bg-muted/30 transition-colors group"
-                                onClick={() => router.push(`/cases/${c.id}`)}
+                                onClick={() => router.push(`/kyc-records/${c.id}`)}
                             >
                                 <TableCell className="font-mono text-sm font-medium">
                                     <div className="flex items-center gap-2">
@@ -185,7 +185,7 @@ export function CasesTable({ cases, isLoading, onSort, sortBy, sortOrder }: Case
                                             size="sm"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                router.push(`/cases/${c.id}`);
+                                                router.push(`/kyc-records/${c.id}`);
                                             }}
                                             className="h-8"
                                         >
@@ -197,7 +197,7 @@ export function CasesTable({ cases, isLoading, onSort, sortBy, sortOrder }: Case
                                             size="sm"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                router.push(`/cases/${c.id}/edit`);
+                                                router.push(`/kyc-records/${c.id}/edit`);
                                             }}
                                             className="h-8"
                                         >

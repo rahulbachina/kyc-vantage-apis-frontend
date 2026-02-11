@@ -8,7 +8,6 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  // Changed endpoint from /api/cases to /api/kyc-records
   const url = `${API_BASE_URL}/api/kyc-records/${id}`;
 
   console.log('[Proxy GET /api/kyc-records/:id]', url);
@@ -60,7 +59,6 @@ export async function PUT(
 ) {
   const { id } = await context.params;
   const body = await request.json();
-  // Changed endpoint from /api/cases to /api/kyc-records
   const url = `${API_BASE_URL}/api/kyc-records/${id}`;
 
   console.log('[Proxy PUT /api/kyc-records/:id]', url);
@@ -87,7 +85,6 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  // Changed endpoint from /api/cases to /api/kyc-records
   const url = `${API_BASE_URL}/api/kyc-records/${id}`;
 
   console.log('[Proxy DELETE /api/kyc-records/:id]', url);

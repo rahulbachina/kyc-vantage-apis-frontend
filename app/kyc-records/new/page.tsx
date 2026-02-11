@@ -26,7 +26,7 @@ export default function CreateCasePage() {
             }
             await createMutation.mutateAsync(payload)
             toast.success("Case created successfully")
-            router.push("/cases")
+            router.push("/kyc-records")
         } catch (error) {
             toast.error("Failed to create case")
             console.error(error)
