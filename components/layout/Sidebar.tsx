@@ -18,28 +18,34 @@ import {
 
 const menuItems = [
     {
-        title: "Cases",
+        title: "Testing - Core",
         items: [
             { name: "All Cases", href: "/cases", icon: FolderOpen },
             { name: "Create Case", href: "/cases/new", icon: PlusCircle },
         ]
     },
     {
-        title: "Operations",
+        title: "Testing - Third Party APIs",
         items: [
-            { name: "BE Pack", href: "/be-pack", icon: Package },
-            { name: "Automation", href: "/automation", icon: Zap },
-            { name: "KYC Review", href: "/kyc-review", icon: CheckCircle2 },
+            { name: "API Test Harness", href: "/api-testing", icon: Zap },
         ]
     },
-    {
-        title: "Management",
-        items: [
-            { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-            { name: "Users", href: "/users", icon: Users },
-            { name: "Settings", href: "/settings", icon: Settings },
-        ]
-    }
+    // {
+    //     title: "Operations",
+    //     items: [
+    //         { name: "BE Pack", href: "/be-pack", icon: Package },
+    //         { name: "Automation", href: "/automation", icon: Zap },
+    //         { name: "KYC Review", href: "/kyc-review", icon: CheckCircle2 },
+    //     ]
+    // },
+    // {
+    //     title: "Management",
+    //     items: [
+    //         { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    //         { name: "Users", href: "/users", icon: Users },
+    //         { name: "Settings", href: "/settings", icon: Settings },
+    //     ]
+    // }
 ]
 
 export function Sidebar() {
@@ -60,9 +66,7 @@ export function Sidebar() {
                 </div>
 
                 {/* Menu Sections */}
-                {menuItems
-                    .filter((section) => section.title !== "Operations" && section.title !== "Management")
-                    .map((section) => (
+                {menuItems.map((section) => (
                     <div key={section.title} className="space-y-2">
                         <h3 className="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             {section.title}
