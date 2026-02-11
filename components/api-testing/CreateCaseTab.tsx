@@ -1,106 +1,91 @@
 "use client"
 
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { Loader2, Plus, CheckCircle2 } from 'lucide-react';
+import { Loader2, Plus, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 
-interface KYCRecordCreate {
-  caseId: string;
-  clientRef: string;
-  status: string;
-  version: number;
-  entity: {
-    legalName: string;
-    jurisdiction: string;
-    contactEmail: string;
-  };
-  relationship: {
-    type: string;
-    systemRequired: string;
-  };
-  role: {
-    primary: string;
-    subType?: string;
-  };
-  rulesOutcome: {
-    ruleSetId: string;
-    requiredDocuments: string[];
-    optionalDocuments: string[];
-  };
-  enrichment: {
-    companiesHouse: {
-      status: string;
-      checkedAt: string;
-    };
-    fca: {
-      status: string;
-      checkedAt: string;
-    };
-    dnb: {
-      status: string;
-      checkedAt: string;
-    };
-    lexisNexis: {
-      status: string;
-      checkedAt: string;
-    };
-  };
-  documents: any[];
-  flags: any[];
-  approvals: any[];
-}
+const createKYCSchema = z.object({
+  caseId: z.string().min(1, 'Case ID is required'),
+  clientRef: z.string().min(1, 'Client Reference is required'),
+  legalName: z.string().min(1, 'Legal Name is required'),
+  jurisdiction: z.string().min(1, 'Jurisdiction is required'),
+  contactEmail: z.string().email('Valid email address is required'),
+  relationshipType: z.enum(['NEW', 'EXISTING'], {
+    required_error: 'Relationship Type is required',
+  }),
+  systemRequired: z.string().min(1, 'System Required is required'),
+  primaryRole: z.enum(['CLIENT', 'UNDERWRITER', 'BROKER', 'REINSURER', 'COVERHOLDER', 'MANAGING_AGENT'], {
+    required_error: 'Primary Role is required',
+  }),
+  subType: z.string().optional(),
+  ruleSetId: z.string().min(1, 'Rule Set ID is required'),
+});
+
+type CreateKYCFormValues = z.infer<typeof createKYCSchema>;
 
 export function CreateCaseTab() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
 
-  const [formData, setFormData] = useState({
-    caseId: '',
-    clientRef: '',
-    legalName: '',
-    jurisdiction: 'GB',
-    contactEmail: '',
-    relationshipType: 'NEW',
-    systemRequired: 'PAS',
-    primaryRole: 'CLIENT',
-    subType: '',
-    ruleSetId: 'DEFAULT_RULESET_V1',
+  const form = useForm<CreateKYCFormValues>({
+    resolver: zodResolver(createKYCSchema),
+    defaultValues: {
+      caseId: '',
+      clientRef: '',
+      legalName: '',
+      jurisdiction: 'GB',
+      contactEmail: '',
+      relationshipType: 'NEW',
+      systemRequired: 'PAS',
+      primaryRole: 'CLIENT',
+      subType: '',
+      ruleSetId: 'DEFAULT_RULESET_V1',
+    },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (values: CreateKYCFormValues) => {
     setLoading(true);
     setResponse(null);
 
     try {
       const now = new Date().toISOString();
 
-      const payload: KYCRecordCreate = {
-        caseId: formData.caseId,
-        clientRef: formData.clientRef,
+      const payload = {
+        caseId: values.caseId,
+        clientRef: values.clientRef,
         status: 'DRAFT',
         version: 1,
         entity: {
-          legalName: formData.legalName,
-          jurisdiction: formData.jurisdiction,
-          contactEmail: formData.contactEmail,
+          legalName: values.legalName,
+          jurisdiction: values.jurisdiction,
+          contactEmail: values.contactEmail,
         },
         relationship: {
-          type: formData.relationshipType,
-          systemRequired: formData.systemRequired,
+          type: values.relationshipType,
+          systemRequired: values.systemRequired,
         },
         role: {
-          primary: formData.primaryRole,
-          ...(formData.subType && { subType: formData.subType }),
+          primary: values.primaryRole,
+          ...(values.subType && { subType: values.subType }),
         },
         rulesOutcome: {
-          ruleSetId: formData.ruleSetId,
+          ruleSetId: values.ruleSetId,
           requiredDocuments: ['KYC_FORM', 'PROOF_OF_ADDRESS'],
           optionalDocuments: ['ADDITIONAL_INFO'],
         },
@@ -163,18 +148,7 @@ export function CreateCaseTab() {
       });
 
       // Reset form
-      setFormData({
-        caseId: '',
-        clientRef: '',
-        legalName: '',
-        jurisdiction: 'GB',
-        contactEmail: '',
-        relationshipType: 'NEW',
-        systemRequired: 'PAS',
-        primaryRole: 'CLIENT',
-        subType: '',
-        ruleSetId: 'DEFAULT_RULESET_V1',
-      });
+      form.reset();
 
     } catch (error: any) {
       console.error('Error creating KYC record:', error);
@@ -204,163 +178,204 @@ export function CreateCaseTab() {
             <CardDescription>Enter the details for the new KYC record</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Case ID */}
-              <div className="space-y-2">
-                <Label htmlFor="caseId">Case ID *</Label>
-                <Input
-                  id="caseId"
-                  value={formData.caseId}
-                  onChange={(e) => setFormData({ ...formData, caseId: e.target.value })}
-                  placeholder="CASE-001"
-                  required
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+                {/* Case ID */}
+                <FormField
+                  control={form.control}
+                  name="caseId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Case ID *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="CASE-001" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              {/* Client Reference */}
-              <div className="space-y-2">
-                <Label htmlFor="clientRef">Client Reference *</Label>
-                <Input
-                  id="clientRef"
-                  value={formData.clientRef}
-                  onChange={(e) => setFormData({ ...formData, clientRef: e.target.value })}
-                  placeholder="CLIENT-REF-001"
-                  required
+                {/* Client Reference */}
+                <FormField
+                  control={form.control}
+                  name="clientRef"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Client Reference *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="CLIENT-REF-001" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              {/* Legal Name */}
-              <div className="space-y-2">
-                <Label htmlFor="legalName">Legal Name *</Label>
-                <Input
-                  id="legalName"
-                  value={formData.legalName}
-                  onChange={(e) => setFormData({ ...formData, legalName: e.target.value })}
-                  placeholder="Acme Corporation Ltd"
-                  required
+                {/* Legal Name */}
+                <FormField
+                  control={form.control}
+                  name="legalName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Legal Name *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Acme Corporation Ltd" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              {/* Jurisdiction */}
-              <div className="space-y-2">
-                <Label htmlFor="jurisdiction">Jurisdiction *</Label>
-                <Select
-                  value={formData.jurisdiction}
-                  onValueChange={(value) => setFormData({ ...formData, jurisdiction: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="GB">United Kingdom (GB)</SelectItem>
-                    <SelectItem value="US">United States (US)</SelectItem>
-                    <SelectItem value="IE">Ireland (IE)</SelectItem>
-                    <SelectItem value="FR">France (FR)</SelectItem>
-                    <SelectItem value="DE">Germany (DE)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Contact Email */}
-              <div className="space-y-2">
-                <Label htmlFor="contactEmail">Contact Email *</Label>
-                <Input
-                  id="contactEmail"
-                  type="email"
-                  value={formData.contactEmail}
-                  onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                  placeholder="contact@example.com"
-                  required
+                {/* Jurisdiction */}
+                <FormField
+                  control={form.control}
+                  name="jurisdiction"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Jurisdiction *</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select jurisdiction" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="GB">United Kingdom (GB)</SelectItem>
+                          <SelectItem value="US">United States (US)</SelectItem>
+                          <SelectItem value="IE">Ireland (IE)</SelectItem>
+                          <SelectItem value="FR">France (FR)</SelectItem>
+                          <SelectItem value="DE">Germany (DE)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              {/* Relationship Type */}
-              <div className="space-y-2">
-                <Label htmlFor="relationshipType">Relationship Type *</Label>
-                <Select
-                  value={formData.relationshipType}
-                  onValueChange={(value) => setFormData({ ...formData, relationshipType: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="NEW">New</SelectItem>
-                    <SelectItem value="EXISTING">Existing</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* System Required */}
-              <div className="space-y-2">
-                <Label htmlFor="systemRequired">System Required *</Label>
-                <Input
-                  id="systemRequired"
-                  value={formData.systemRequired}
-                  onChange={(e) => setFormData({ ...formData, systemRequired: e.target.value })}
-                  placeholder="PAS"
-                  required
+                {/* Contact Email */}
+                <FormField
+                  control={form.control}
+                  name="contactEmail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contact Email *</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="contact@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              {/* Primary Role */}
-              <div className="space-y-2">
-                <Label htmlFor="primaryRole">Primary Role *</Label>
-                <Select
-                  value={formData.primaryRole}
-                  onValueChange={(value) => setFormData({ ...formData, primaryRole: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="CLIENT">Client</SelectItem>
-                    <SelectItem value="UNDERWRITER">Underwriter</SelectItem>
-                    <SelectItem value="BROKER">Broker</SelectItem>
-                    <SelectItem value="REINSURER">Reinsurer</SelectItem>
-                    <SelectItem value="COVERHOLDER">Coverholder</SelectItem>
-                    <SelectItem value="MANAGING_AGENT">Managing Agent</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Sub Type */}
-              <div className="space-y-2">
-                <Label htmlFor="subType">Sub Type (Optional)</Label>
-                <Input
-                  id="subType"
-                  value={formData.subType}
-                  onChange={(e) => setFormData({ ...formData, subType: e.target.value })}
-                  placeholder="Optional sub-type"
+                {/* Relationship Type */}
+                <FormField
+                  control={form.control}
+                  name="relationshipType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Relationship Type *</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select relationship type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="NEW">New</SelectItem>
+                          <SelectItem value="EXISTING">Existing</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              {/* Rule Set ID */}
-              <div className="space-y-2">
-                <Label htmlFor="ruleSetId">Rule Set ID *</Label>
-                <Input
-                  id="ruleSetId"
-                  value={formData.ruleSetId}
-                  onChange={(e) => setFormData({ ...formData, ruleSetId: e.target.value })}
-                  placeholder="DEFAULT_RULESET_V1"
-                  required
+                {/* System Required */}
+                <FormField
+                  control={form.control}
+                  name="systemRequired"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>System Required *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="PAS" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating...
-                  </>
-                ) : (
-                  <>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create KYC Record
-                  </>
-                )}
-              </Button>
-            </form>
+                {/* Primary Role */}
+                <FormField
+                  control={form.control}
+                  name="primaryRole"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Primary Role *</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select primary role" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="CLIENT">Client</SelectItem>
+                          <SelectItem value="UNDERWRITER">Underwriter</SelectItem>
+                          <SelectItem value="BROKER">Broker</SelectItem>
+                          <SelectItem value="REINSURER">Reinsurer</SelectItem>
+                          <SelectItem value="COVERHOLDER">Coverholder</SelectItem>
+                          <SelectItem value="MANAGING_AGENT">Managing Agent</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Sub Type */}
+                <FormField
+                  control={form.control}
+                  name="subType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sub Type (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Optional sub-type" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Rule Set ID */}
+                <FormField
+                  control={form.control}
+                  name="ruleSetId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Rule Set ID *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="DEFAULT_RULESET_V1" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create KYC Record
+                    </>
+                  )}
+                </Button>
+              </form>
+            </Form>
           </CardContent>
         </Card>
 
