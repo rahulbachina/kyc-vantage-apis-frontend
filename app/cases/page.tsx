@@ -83,18 +83,16 @@ export default function CasesPage() {
     // Calculate statistics (updated for QueryDog API statuses)
     const totalCases = data?.totalElements || 0
     const activeCases = data?.content?.filter(c =>
-        c.status !== "APPROVED" &&
-        c.status !== "REJECTED" &&
-        c.status !== "ENRICHED"
+        c.status !== "COMPLETED" &&
+        c.status !== "REJECTED"
     ).length || 0
     const completedCases = data?.content?.filter(c =>
-        c.status === "APPROVED" ||
-        c.status === "ENRICHED"
+        c.status === "COMPLETED"
     ).length || 0
     // Count rejected/under review cases as "high risk" (API doesn't have risk tier field)
     const highRiskCases = data?.content?.filter(c =>
         c.status === "REJECTED" ||
-        c.status === "UNDER_REVIEW"
+        c.status === "AWAITING_KYC_REVIEW"
     ).length || 0
 
     return (
