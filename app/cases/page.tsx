@@ -56,7 +56,7 @@ export default function CasesPage() {
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                        KYC Case Management
+                        KYC Automation Core API Test Harness
                     </h2>
                     <p className="text-muted-foreground mt-1">
                         Manage and track all KYC cases across your organization

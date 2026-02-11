@@ -9,8 +9,8 @@ import { Sidebar } from "@/components/layout/Sidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Vantage KYC Case Management",
-  description: "Ardonagh Specialities KYC Case Management",
+  title: "KYC Automation Core API Test Harness",
+  description: "KYC Automation Core API Test Harness",
 };
 
 export default function RootLayout({
