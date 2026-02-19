@@ -43,6 +43,7 @@ interface RulesData {
             finalRiskProfile: string
             documentSetCode: string
             cddLevel: string
+            questionnaireCode?: string
         }>
     }
     clientClassificationFlags?: {
@@ -151,10 +152,23 @@ function InlineCollapsible({ title, count, children }: { title: string; count?: 
 function VisualiseTab({ data }: { data: RulesData }) {
     const [openCountryRisk, setOpenCountryRisk] = useState(0)
     const [openDocSets, setOpenDocSets] = useState(0)
+    const acronyms = new Set(["FCA", "TOBA", "CH", "CDD", "DB"])
 
     const scrollTo = (id: string, setter: React.Dispatch<React.SetStateAction<number>>) => {
         setter(n => n + 1)
         setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50)
+    }
+
+    const formatCheckGroupLabel = (key: string) => {
+        const spaced = key.replace(/([A-Z])/g, ' $1').trim()
+        return spaced
+            .split(/\s+/)
+            .map(word => {
+                const upper = word.toUpperCase()
+                if (acronyms.has(upper)) return upper
+                return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            })
+            .join(' ')
     }
 
     const higherCountries = (() => {
@@ -177,10 +191,19 @@ function VisualiseTab({ data }: { data: RulesData }) {
                 </CardHeader>
                 <CardContent className="pt-4">
                     <div className="rounded-lg border overflow-hidden">
-                        <table className="w-full text-sm">
+                        <table className="w-full text-sm table-fixed">
+                            <colgroup>
+                                <col style={{ width: "10%" }} />
+                                <col style={{ width: "13%" }} />
+                                <col style={{ width: "17%" }} />
+                                <col style={{ width: "11%" }} />
+                                <col style={{ width: "16%" }} />
+                                <col style={{ width: "21%" }} />
+                                <col style={{ width: "12%" }} />
+                            </colgroup>
                             <thead>
                                 <tr className="bg-muted/40 border-b">
-                                    {["Country Risk", "Introducer Type", "Introducer Sub Type", "Final Risk Profile", "Document Set Code", "CDD Level"].map(h => (
+                                    {["Country Risk", "Introducer Type", "Introducer Sub Type", "Final Risk Profile", "Questionnaire Code", "Document Set Code", "CDD Level"].map(h => (
                                         <th key={h} className="text-left p-3 font-semibold text-muted-foreground">{h}</th>
                                     ))}
                                 </tr>
@@ -199,6 +222,7 @@ function VisualiseTab({ data }: { data: RulesData }) {
                                         <td className="p-3 text-sm text-left">{r.roleMain}</td>
                                         <td className="p-3 text-sm text-left">{r.roleSub}</td>
                                         <td className="p-3 text-sm text-left">{r.finalRiskProfile}</td>
+                                        <td className="p-3 text-sm text-left font-mono text-xs">{r.questionnaireCode ?? "—"}</td>
                                         <td className="p-3 text-sm text-left">
                                             <button
                                                 className="text-blue-600 hover:underline hover:text-blue-800 font-medium font-mono text-xs"
@@ -299,10 +323,10 @@ function VisualiseTab({ data }: { data: RulesData }) {
                         .filter(([k]) => k !== 'description')
                         .map(([key, checks]: [string, any]) => {
                             if (!Array.isArray(checks) || checks.length === 0) return null
-                            const label = key.replace(/([A-Z])/g, ' $1').trim()
+                            const label = formatCheckGroupLabel(key)
                             return (
                                 <div key={key}>
-                                    <p className="text-sm font-semibold mb-2 capitalize">{label}</p>
+                                    <p className="text-sm font-semibold mb-2">{label}</p>
                                     <SimpleTable
                                         headers={["Check Code", "Description", "Pass Condition", "Fail Condition", "Source", "Status", "Phase"]}
                                         colWidths={["13%", "19%", "24%", "24%", "10%", "6%", "4%"]}
@@ -387,6 +411,7 @@ function VisualiseTab({ data }: { data: RulesData }) {
                             {docSet.documents && Array.isArray(docSet.documents) && (
                                 <SimpleTable
                                     headers={["Document Name", "Mandatory", "Automated", "Notes"]}
+                                    colWidths={["50%", "12%", "12%", "26%"]}
                                     rows={docSet.documents.map((doc: any) =>
                                         typeof doc === 'string'
                                             ? [doc, "—", "—", "—"]

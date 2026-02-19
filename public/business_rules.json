@@ -12,7 +12,8 @@
         "roleSub": "Intermediary",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_CLIENT_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_CLIENT_INTERMEDIARY"
       },
       {
         "countryRisk": "LOWER",
@@ -20,7 +21,8 @@
         "roleSub": "Direct",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_CLIENT_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_CLIENT_DIRECT"
       },
       {
         "countryRisk": "LOWER",
@@ -28,7 +30,8 @@
         "roleSub": "Reinsured",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_CLIENT_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_CLIENT_REINSURED"
       },
       {
         "countryRisk": "LOWER",
@@ -36,7 +39,8 @@
         "roleSub": "Individual",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_CLIENT_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_CLIENT_INDIVIDUAL"
       },
       {
         "countryRisk": "LOWER",
@@ -44,7 +48,8 @@
         "roleSub": "Service Provider",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "LOWER",
@@ -52,7 +57,8 @@
         "roleSub": "Assured",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "LOWER",
@@ -60,7 +66,8 @@
         "roleSub": "Broker",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "LOWER",
@@ -68,7 +75,8 @@
         "roleSub": "Introducer",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "LOWER",
@@ -76,7 +84,8 @@
         "roleSub": "Individual",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "LOWER",
@@ -84,7 +93,8 @@
         "roleSub": "Rated Bureau Direct",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_UNDERWRITER_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "LOWER",
@@ -92,7 +102,8 @@
         "roleSub": "Unrated Bureau Direct",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_UNDERWRITER_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "LOWER",
@@ -100,7 +111,8 @@
         "roleSub": "Rated Non-Bureau Direct",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_UNDERWRITER_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "LOWER",
@@ -108,7 +120,8 @@
         "roleSub": "Unrated Non-Bureau Direct",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_UNDERWRITER_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "LOWER",
@@ -116,7 +129,8 @@
         "roleSub": "MGA/Agency",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_UNDERWRITER_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "LOWER",
@@ -124,7 +138,8 @@
         "roleSub": "Sub-Broker / Placing Intermediary",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_UNDERWRITER_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "LOWER",
@@ -132,7 +147,8 @@
         "roleSub": "Rated Indirect Market / H-Code",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_UNDERWRITER_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "LOWER",
@@ -140,7 +156,8 @@
         "roleSub": "Unrated Indirect Market / H-Code",
         "finalRiskProfile": "LOWER",
         "documentSetCode": "DOC_UNDERWRITER_LOW",
-        "cddLevel": "Standard CDD"
+        "cddLevel": "Standard CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "HIGHER",
@@ -148,7 +165,8 @@
         "roleSub": "Intermediary",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_CLIENT_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_CLIENT_INTERMEDIARY"
       },
       {
         "countryRisk": "HIGHER",
@@ -156,7 +174,8 @@
         "roleSub": "Direct",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_CLIENT_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_CLIENT_DIRECT"
       },
       {
         "countryRisk": "HIGHER",
@@ -164,7 +183,8 @@
         "roleSub": "Reinsured",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_CLIENT_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_CLIENT_REINSURED"
       },
       {
         "countryRisk": "HIGHER",
@@ -172,7 +192,8 @@
         "roleSub": "Individual",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_CLIENT_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_CLIENT_INDIVIDUAL"
       },
       {
         "countryRisk": "HIGHER",
@@ -180,7 +201,8 @@
         "roleSub": "Service Provider",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "HIGHER",
@@ -188,7 +210,8 @@
         "roleSub": "Assured",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "HIGHER",
@@ -196,7 +219,8 @@
         "roleSub": "Broker",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "HIGHER",
@@ -204,7 +228,8 @@
         "roleSub": "Introducer",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "HIGHER",
@@ -212,7 +237,8 @@
         "roleSub": "Individual",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_THIRD_PARTY",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_THIRD_PARTY"
       },
       {
         "countryRisk": "HIGHER",
@@ -220,7 +246,8 @@
         "roleSub": "Rated Bureau Direct",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_UNDERWRITER_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "HIGHER",
@@ -228,7 +255,8 @@
         "roleSub": "Unrated Bureau Direct",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_UNDERWRITER_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "HIGHER",
@@ -236,7 +264,8 @@
         "roleSub": "Rated Non-Bureau Direct",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_UNDERWRITER_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "HIGHER",
@@ -244,7 +273,8 @@
         "roleSub": "Unrated Non-Bureau Direct",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_UNDERWRITER_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "HIGHER",
@@ -252,7 +282,8 @@
         "roleSub": "MGA/Agency",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_UNDERWRITER_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "HIGHER",
@@ -260,7 +291,8 @@
         "roleSub": "Sub-Broker / Placing Intermediary",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_UNDERWRITER_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "HIGHER",
@@ -268,7 +300,8 @@
         "roleSub": "Rated Indirect Market / H-Code",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_UNDERWRITER_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       },
       {
         "countryRisk": "HIGHER",
@@ -276,7 +309,8 @@
         "roleSub": "Unrated Indirect Market / H-Code",
         "finalRiskProfile": "HIGHER",
         "documentSetCode": "DOC_UNDERWRITER_HIGH",
-        "cddLevel": "Enhanced CDD"
+        "cddLevel": "Enhanced CDD",
+        "questionnaireCode": "Q_UNDERWRITER"
       }
     ]
   },
